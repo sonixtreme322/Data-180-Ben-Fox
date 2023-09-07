@@ -32,5 +32,18 @@ palette()
 palette(c("red2","orchid1","yellow4","tomato2"))
 palette()
 
-#We can generate a bar graph through R too using this longass command (starting with barplot) I'll write more details about in the textbook
-#We can also generate a pie chart with a similarly large command that starts with the word pie
+#Making a stem plot
+Cars93$Weight #All of their weights
+
+stem(Cars93$Weight) 
+
+#Dot plot of MPG
+Cars93$MPG.city
+
+stripchart(Cars93$MPG.city,method="stack",pch=16, cex.axis=1.2,cex.lab=1.2,xlab="Miles per Gallon")
+
+#Histogram of Weight
+Cars93$Weight
+
+hist(Cars93$Weight, cex.lab=1.2, cex.axis=1.2, col="lightgray", breaks=seq(1000, 5000, 500), xlab="Weight of Cars")
+
