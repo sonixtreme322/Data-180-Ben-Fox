@@ -9,6 +9,7 @@
 
 function_name <- function(parameters){
   #Do something here
+  r <- 16
 }
 
 function_name
@@ -23,7 +24,7 @@ print(circumference(6))
 
  # A function that always prints your name
 my_name <- function(){
-  'Kennedy Odongo'
+  'Benjamin J. Fox'
 }
 print(my_name())
 
