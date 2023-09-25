@@ -8,6 +8,9 @@ date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output: 
   html_document
 ---
+
+18/20. Good job Ben
+
 Make sure that you have accepted the hw invitation link, and working with your clone repository.
 
 **Due date:** September 21 beginning of class.
@@ -138,7 +141,8 @@ get_fibonacci <- function(x){
 b. Using your function in part (a), find and return the 19th value in the fibonacci sequence.
 ```{r}
 #Find  the wanted number
-get_fibonacci(19)
+get_fibonacci(5)
+# 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144. This is the fibonacci sequence. get_fibonacci(5)should return 3. 
 
 ```
 
