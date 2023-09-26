@@ -2,8 +2,8 @@
 title: "HW 2: Visualization, Base R"
 subtitle: "Data 180, Professor Kennedy"
 author: 
-  name: "XXXX"
-  email: "XXXX@dickinson.edu"
+  name: "Benjamin J. Fox"
+  email: "foxbe@dickinson.edu"
 date: '`r format(Sys.Date(), "%B %d, %Y")`' # no need to change date since this line grabs today's date
 output: 
   html_document
@@ -37,11 +37,21 @@ head(Cars93)
 ## Task 1
 a) Create a Frequency table and Relative Frequency table (latter uses percentages) for the variable `Type`. Make sure to round all digits to 3 digits.
 ```{r}
+#Creating a frequency table
+type_frequency <- table(Cars93$Type)
 
+#Finding the length of that table to make relative frequency easier
+type_length <- length(Cars93$Type)
+
+#Finding the relative frequency table
+type_percent_frequency <- round(type_frequency/type_length, 3)
 ```
 b) Create a frequency bar graph for the variable `Type`. You can have count on the y axis.
 ```{r}
-
+barplot(type_frequency, 
+        col = c("red", "orange", "yellow", "green", "blue", "purple"), 
+        main = "Type Frequency Bar Graph", cex.axis = 1.2, 
+        cex.names = 1.2, cex.main = 1.2)
 ```
 
 *	Your axes should be labeled and legible
@@ -51,7 +61,9 @@ b) Create a frequency bar graph for the variable `Type`. You can have count on t
 
 c) Create a pie chart of the variable `Type`.
 ```{r}
-
+pie(type_frequency, main = "Pie Chart of Type Frequency", 
+    cex.axis = 1.2, cex.lab = 1.2, cex.main = 1.2, 
+    col = c("red", "orange", "yellow", "green", "blue", "purple"))
 ```
 
 * The plot should include a title using the main argument.
@@ -63,7 +75,9 @@ d) What is the mode of the variable `Type`? Comment.
 ## Task 2 
 a) Create a histogram of the variable `Horsepower`.
 ```{r}
-
+#Create horsepower histogram
+hist(Cars93$Horsepower, col = "orchid", xlab = "Horsepower", 
+          cex.lab = 1.2, cex.axis = 1.2,  cex.main = 1.2)
 ```
 
 *	Your axes should be labeled
@@ -73,7 +87,9 @@ a) Create a histogram of the variable `Horsepower`.
 
 b) Create a second histogram with breaks at 25 HP increments instead of 50.
 ```{r}
-
+#Create basically the same histogram and tweak the bin width
+hist(Cars93$Horsepower, col = "orchid", xlab = "Horsepower", 
+          cex.lab = 1.2, cex.axis = 1.2, cex.main = 1.2, breaks = 10)
 ```
 
 * Use the breaks argument to define the classes
@@ -81,33 +97,58 @@ b) Create a second histogram with breaks at 25 HP increments instead of 50.
 
 c) Which histogram more closely follows or rule of thumb for the suggested number of classes? Explain.
 ```{r}
+#Find the length of the horsepower data
+horsepower_length <- length(Cars93$Horsepower)
 
+#Find the square root of the length
+horsepower_ideal_classes <- round(sqrt(horsepower_length))
+
+horsepower_ideal_classes
+
+#Since horsepower ideal classes = 10, and when binwidth = 25 you have 11 bins, when binwidth = 50 you have 6 bins. Therefore the second histogram most closely follows the correct rule of thumb.
 ```
 
 
 ## Task 3 
 a) What is the type of variable `Passengers`? (Categorical nominal/ordinal or Numerical discrete/continuous?) What happens if we were to make a histogram for `Passengers`? What is the problem with this graph?
 ```{r}
+#Print Passengers
+Cars93$Passengers
 
+#It is a numerical discrete variable. It's a bad idea to make this variable into a histogram because you won't need to sort them into ranges both because they're integers and the width of the possible values isn't large enough to warrant using a histogram.
 ```
 
 b) Correct the problem in part (a) by creating a more appropriate visualization. Make sure to label your axes, place a title, choose a custom color as in the previous graphs. (Bonus: use factor() with levels option to display x axis values with no observations on the plot.)
 ```{r}
+#I'll make a table to sort things out a bit easier when I get to making the bar plot
+passenger_frequency <- table(Cars93$Passengers)
 
+#A bar graph is better, so I'll make that.
+barplot(passenger_frequency, main = "Frequency of Passengers", 
+        xlab = "Amount of Passengers", ylab = "Frequency", 
+        col = c("pink", "#ff8888", "#ffffaa", "#aaffaa", "#aaccff", "#aa66aa"), 
+        cex.axis = 1.2, cex.lab = 1.2, cex.main = 1.2)
 ```
 
 ## Task 4 
 a) Make a histogram of the variable `Length` (the default breaks are fine). Other aspects of the plot should be as in part (a) in Task 2.
 ```{r}
-
+hist(Cars93$Length, col = "orchid", xlab = "Length", 
+          cex.lab = 1.2, cex.axis = 1.2,  cex.main = 1.2)
 ```
 
 b) What is the shape of the distribution?
-
+It is a largely normally distributed function, with a very slight skew right. 
 
 c) Find the mean and median of the variable `Length.` Do these answers meet your expectations from part (b)?
 ```{r}
+#What is the mean?
+mean(Cars93$Length)
+#I think that 183.2043 makes sense, this is around the mid point of the histogram and is also where the graph has the highest frequency
 
+#What is the median?
+median(Cars93$Length)
+#The median is just 183, which also makes sense, that's around the middle, and the mode, plus it's only a little smaller than what the mean is so it helps the belief that the data is normally distributed.
 ```
 
 You are done! 🏁 Don't forget to commit and push your .Rmd file to your Github repository before the due date.
