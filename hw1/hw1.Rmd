@@ -3,11 +3,14 @@ title: "HW 1"
 subtitle: "Data 180, Professor Kennedy"
 author: 
   name: "Benjamin J. Fox"
-  email: "XXXX@dickinson.edu"
+  email: "foxbe@dickinson.edu"
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output: 
   html_document
 ---
+
+18/20. Good job Ben
+
 Make sure that you have accepted the hw invitation link, and working with your clone repository.
 
 **Due date:** September 21 beginning of class.
@@ -24,7 +27,16 @@ Go to [datacamp.com](https://datacamp.com) and complete the tutorial "Introducti
 
 ## Task 1
 a) Store the data below in a data frame object named `my_df`.
+```{r}
+#Creating the vectors for people and preference
+people <- c("Alice", "Bob", "Charlie", "Denise", "Erin", "Frank", "Gisele", "Harry")
+preference <- c("Twitter", "Facebook", "Twitter", "Instagram", "Facebook", "Twitter", "Twitter", "Instagram")
 
+#Storing the data in a data frame object
+my_df <- data.frame(people, preference)
+
+my_df
+```
 
 |Person | Preference|
 |:------|:----------|
@@ -38,25 +50,101 @@ a) Store the data below in a data frame object named `my_df`.
 | Harry | Instagram |
 
 b) What are the dimensions of `my_df`?
+The dimensions of "my_df" are people and preference since each entry in one corresponded to a result in the other.
 
 c) Write R code that counts the total number of users.
+```{r}
+#Get the amount of people and put it in a variable
+total_users <- length(people)
 
+
+#Print it
+total_users
+```
 d) Write R code that counts the total number of users who prefer Twitter.
+```{r}
+#Use subset to get specifically the people who prefer twitter
+twitter = subset(my_df, subset = preference == "Twitter")
 
+#Print that result
+twitter
+```
 e) Write R code that returns what Gisele prefers.
+```{r}
+#Find where that information is stored
+gisele = my_df[7,2]
+
+#Print that data
+gisele
+```
 
 ## Task 2
 a) Create a vector named `my_vec` that includes all integers from 1 to 10 (inclusive).
+```{r}
+#Create that vector
+my_vec <- c(1:10)
 
+#Print that vector to test that it worked
+my_vec
+```
 b) Replace the second element in `my_vec` with the number `99`.
+```{r}
+#Assign 99 to the second value in my_vec
+my_vec[2] <- 99
+
+#Print my_vec to make sure the change took
+my_vec
+```
 
 c) Write a function called `my_func` that prints `This element is greater than 5!` if an element in `myvec` is greater than 5, and `This element is NOT greater than 5!` otherwise.
+```{r}
+#Make a function
+my_function <- function(vector){
+  #For-loop to sort through the vector
+  for (i in my_vec) {
+    #If-else ladder to print the correct statement
+    if (i > 5) {
+      print("This element is greater than 5!")
+    } else {
+      print("This element is NOT greater than 5!")
+    }
+  }
+}
+
+#Test function
+my_function(my_vec)
+```
 
 ## Task 3
 a. Write a function named `get_fibonacci` that returns the n'th value in the [fibonacci sequence](https://www.mathsisfun.com/numbers/fibonacci-sequence.html). For example, `get_fibonacci(5)` should return 3; `get_fibonacci(7)` should return 8 and so on. ***Hint:** It is possible to call the same function from inside it. E.g., you can call `get_fibonacci()` from inside `get_fibonacci()`. Like inception!*
+```{r}
+#Create the function
+get_fibonacci <- function(x){
+  #Assign the first two values of the sequence
+  p <- 0
+  q <- 1
+  
+  #For loop to find the rest of the fibonacci sequence
+  for (i in 1:x){
+    #Calculate the next number in the sequence
+    next_num <- p + q
+    
+    #Reassign numbers accordingly
+    p <- q
+    q <- next_num
+  }
+  
+  return(p)
+}
+```
 
 b. Using your function in part (a), find and return the 19th value in the fibonacci sequence.
+```{r}
+#Find  the wanted number
+get_fibonacci(5)
+# 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144. This is the fibonacci sequence. get_fibonacci(5)should return 3. 
 
+```
 
 <br>
 You are done! 🏁 Don't forget to `commit` and `push` your .Rmd file to your Github clone repository before the due date.
