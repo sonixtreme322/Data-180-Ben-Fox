@@ -30,14 +30,15 @@ Cars93_Ex7<-select(filter(Cars93, Type %in% c("Sporty","Compact") & Horsepower >
             Model,Type,EngineSize,Cylinders,Horsepower,MPG.highway)
 head(Cars93_Ex7)
 
-# Mutate function.
+# Mutate function. Allows you to create a new variable to observe by having you do arithmetic with two other variables
 Cars93_Ex9<-select(mutate(Cars93,HPpLiter=Horsepower/EngineSize),Model,Type,EngineSize,Cylinders,Horsepower,MPG.highway,HPpLiter)
 
 
 # Equivalent pipeline
 Cars93_Ex9<-Cars93 %>%mutate(HPpLiter=Horsepower/EngineSize) %>%select(Model,Type,EngineSize,Cylinders,Horsepower,MPG.highway,HPpLiter)
+head(Cars93_Ex9)
 
-#Using the arrange function to sort your dataframe
+#Using the arrange function to sort your dataframe. In the order of the first value, with the value in desc() being used for tie breakers. Run the function to understand
 Cars93_Ex10<-arrange(Cars93_Ex9,Cylinders,desc(Horsepower))
 head(Cars93_Ex10)
 
@@ -46,7 +47,7 @@ head(Cars93_Ex10)
 Cars93_Ex11<-rename(Cars93_Ex10,HP=Horsepower,MPG_Highway=MPG.highway)
 head(Cars93_Ex11)
 
-#Using more of the mutate function. 
+#Using more of the mutate function. The round function being used below marks the value being rounded and then the number rounds the function to the desired decimal place.
 Cars93_Ex12<-mutate(Cars93_Ex11,HPpLiter=round(HPpLiter,1))
 head(Cars93_Ex12)
 
