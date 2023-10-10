@@ -8,6 +8,7 @@ date: '`r format(Sys.Date(), "%B %d, %Y")`' # no need to change date since this 
 output: 
   html_document
 ---
+17/20. Good job. Sound analysis.
 
 Make sure that you have accepted the hw invitation link, and working with your clone repository.
 
@@ -70,7 +71,7 @@ pie(type_frequency, main = "Pie Chart of Type Frequency",
 *	The names, labels, and axes sizes (cex parameter) should be set to 1.2
 
 d) What is the mode of the variable `Type`? Comment.
-
+What is the mode? (-2)
 
 ## Task 2 
 a) Create a histogram of the variable `Horsepower`.
@@ -128,6 +129,8 @@ barplot(passenger_frequency, main = "Frequency of Passengers",
         xlab = "Amount of Passengers", ylab = "Frequency", 
         col = c("pink", "#ff8888", "#ffffaa", "#aaffaa", "#aaccff", "#aa66aa"), 
         cex.axis = 1.2, cex.lab = 1.2, cex.main = 1.2)
+
+# This bar plot should show the frequency of cars that carry 1 and 3 passengers as 0 (-2)
 ```
 
 ## Task 4 
