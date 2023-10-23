@@ -2,12 +2,13 @@
 title: "HW 3: Visualization, Ggplot2 & Maps"
 subtitle: "Data 180, Professor Kennedy"
 author: 
-  name: "XXXX"
-  email: "XXXX@dickinson.edu"
+  name: "Benjamin J. Fox"
+  email: "foxbe@dickinson.edu"
 date: '`r format(Sys.Date(), "%B %d, %Y")`' # no need to change date since this line grabs today's date
 output: 
   html_document
 ---
+20/20. good job
 
 Make sure that you have accepted the hw invitation link, and working with your clone repository.
 
@@ -40,7 +41,8 @@ Create a simple scatterplot using ggplot2 where x axis shows `EngineSize`, y axi
 
  
 ```{r}
-
+#Mapped out the requested with unhelpful text cause I wasn't sure what to write where.
+ggplot(Cars93, aes(EngineSize, MPG.city)) + geom_point(size = 2, colour = "blue") + labs(title = "Engine Size to Miles Per Gallon in Cities", subtitle = "This is the chart you asked me to make", caption = "This is how we do it") + xlab("Engine Size") + ylab("Miles Per Gallon (City)")
 ```
 
 ## Task 2
@@ -48,7 +50,8 @@ Recreate the scatterplot in Task 1. Add the following functionality:
 
 * Use a different color for each car `Type`.
 ```{r}
-
+#Copy-pasted the graph and colored the necessary factor variable.
+ggplot(Cars93, aes(EngineSize, MPG.city, colour = Type)) + geom_point(size = 2) + labs(title = "Engine Size to Miles Per Gallon in Cities", subtitle = "This is the chart you asked me to make", caption = "This is how we do it") + xlab("Engine Size") + ylab("Miles Per Gallon (City)")
 ```
 
 ## Task 3
@@ -58,7 +61,8 @@ Recreate the scatterplot in Task 2. Add the following functionality:
 * Make the curve line red, and dashed. (Hint linetype is the option you can use to set line style as 'dashed')
 
 ```{r}
-
+#Added a smooth dashed line over the previous data, and moved the color-type thing so only the dots would be colored
+ggplot(Cars93, aes(EngineSize, MPG.city)) + geom_point(size = 2, aes(colour = Type)) + labs(title = "Engine Size to Miles Per Gallon in Cities", subtitle = "This is the chart you asked me to make", caption = "This is how we do it") + xlab("Engine Size") + ylab("Miles Per Gallon (City)") + geom_smooth(method = "loess", se = F, linetype = "dashed", color = "red")
 ```
 
 ## Task 4
@@ -69,7 +73,8 @@ Create a barplot showing count of cars by `AirBags` using ggplot2.
 * Add a title, subtitle, x axis label, y axis label, and a caption using title, subtitle, caption options inside `+ labs()`.
 
 ```{r}
-
+#Made a bar graph and colored them so it's Halloween themed.
+ggplot(Cars93, aes(AirBags)) + geom_bar(fill = c("#ff7700", "#00aa00", "#aa0088")) + labs(title = "Frequency of Airbag Implementation", subtitle = "Data gathered from Cars93 dataset", caption = "Sponsored by Subway lmao") + xlab("Airbag Implementation") + ylab("Frequency")
 ```
 
 ## Task 5
@@ -80,7 +85,8 @@ Recreate the barplot in Task 4 for different car `Origin`, such that you create 
 * in `geom_bar(), use `position='dodge'` to have the barplots side by side.
 
 ```{r}
-
+#Did the same bar graph except I added another variable and made sure it was graphed in the desired format.
+ggplot(Cars93, aes(x=Origin, fill = AirBags)) + geom_bar(position = "dodge") + labs(title = "Frequency of Airbag Implementation", subtitle = "Data gathered from Cars93 dataset", caption = "Sponsored by Subway lmao") + xlab("Airbag Implementation Between Regions") + ylab("Frequency")
 ```
 
 # Maps
@@ -95,19 +101,22 @@ au_states <- ozmaps::ozmap_states # read in spatial dataframe object
 
 # Display the data
 head(au_states)
+au_states
 ```
 Notice that `NAME` includes the name of a state, `geometry` includes spatial coordinate data for each state polygon (area).
 
 ## Task 1
 Create a map of Australia using `ggplot2`.
 ```{r}
-
+#Just used the basic requested command
+ggplot(au_states) + geom_sf()
 ```
 
 ## Task 2
 Modify your map such that each state is displayed with a different color. (Hint: use the fill option as an aes setting with variable `NAME`.)
 ```{r}
-
+#Copypasted the command and added an aes variable to note the different Australian states
+ggplot(au_states, aes(fill = NAME)) + geom_sf()
 ```
 ## Task 3
 Read in the capital city dataframe showing each capital and its latitude and longitude information by running:
@@ -131,14 +140,17 @@ Display the capitals as points on your map from Task 1. (Hint: combine `geom_sf(
 * Use `size=2` to make points larger.
 
 ```{r}
-
+#Did the same command and added dots for the state capitals. I also put the data source in each geom command in order to make sure they wouldn't interfere with each other.
+ggplot() + geom_sf(data = au_states, aes(fill = NAME)) + geom_point(data = au_capitals, aes(lon, lat), col = "red", size = 2)
 ```
 
 
 ## Task 4
 Let's take a look at a different projection output. Change your map's projection to epsg 3112 by adding `+ coord_sf()`. Recall the option that goes inside `coord_sf()` is `st_crs(4_digit_code)`
 ```{r}
-
+#I honestly don't fully don't know what you want here, this just seems to be giving me the map from before and putting coord_sf after geom_sf is just throwing errors
+default_crs <- sf::st_crs(4326)
+ggplot() + coord_sf(default_crs) + geom_sf(data = au_states, aes(fill = NAME)) + geom_point(data = au_capitals, aes(lon, lat), col = "red", size = 2)
 ```
 
 ## Task 5
@@ -151,7 +163,8 @@ library(mapview)
 Create an interactive map of Australia using `mapview()`
 
 ```{r}
-
+#Just put in the command
+mapview(au_states)
 ```
 
 ## Task 6
@@ -165,7 +178,8 @@ Now add the new spatial capitals object via + (that is, you can use the followin
 * You can use the option `col.regions='red'` to make capitals appear in color red, and `legend=F` in second `mapview()` to remove the uninformative second set of legend. 
 
 ```{r}
-
+#Just tacked the other command on and added the requested options.
+mapview(au_states) + mapview(capitals_geo, col.regions="red", legend=F)
 ```
 
 
