@@ -2,8 +2,8 @@
 title: "HW 4: Dplyr"
 subtitle: "Data 180, Professor Kennedy"
 author: 
-  name: "Your Name"
-  email: "XXXX@dickinson.edu"
+  name: "Benjamin J. Fox"
+  email: "foxbe@dickinson.edu"
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output: 
   html_document
@@ -42,45 +42,86 @@ Here are the variables included and their meanings:
 For the entire data, display the summary statistics (mean, median, mode, etc.) using the dplyr function `summary()` via pipe.
 
 ```{r}
-
+#Plugged in the dataset to the requested function.
+summary(records)
 ```
 # Question 2
 Return the count of cases where a record was broken in more than a year (365 days).
 
 ```{r}
+#Assigns a new data frame filtering out records that were made after more than a year
+year_longer <- filter(records, record_duration > 365)
 
+#Prints the length of new data frame
+length(year_longer)
+
+#There are only 9 cases of this happening.
 ```
 # Question 3
 Return name of the player, name of the track, record date, and record duration for the record that took the longest time to be broken.
 
 ```{r}
+#Found the man by selecting the requested columns, and filtering the record duration to its maximum value
+cool_guy <- records %>%
+  select(player, track, date, record_duration) %>%
+  filter(record_duration == max(record_duration))
 
+#Printed the result.
+cool_guy
 ```
 
 # Question 4
 Return the mean record time (`time`) by each track. What is the name of the track with the fastest average record time? *Hint: you should use `group_by() and summarize()*
 
 ```{r}
+#Made a slightly new data set grouping records by track so that summarize can do its thing properly
+track_group <- group_by(records, track)
 
+#Summarized the data set to find the average time for each track
+mean_records <- summarize(track_group, av_time = mean(time, na.rm = TRUE))
+
+#Printed result
+mean_records
+
+#Found the smallest one using a simple filter function, it's Mario Raceway
+filter(mean_records, av_time == min(av_time))
 ```
 # Question 5
 Let's get the year from the `date` column and save it as a variable named `year`. You can use the function `substr(date, 1, 4)` which grabs the first 4 digits in the `date` column. Use this expression in `mutate()` to create a `year` column. (Don't forget to save/overwrite the dataframe returned to the original one!)
 
 ```{r}
+#Added a new variable "year" through mutate
+records <- mutate(records, year = substr(date, 1, 4))
 
+#Checking to see if it was added
+head(records)
 ```
 
 # Question 6
 Now get the average record time (`time`) by year.
 
 ```{r}
+#Grouped by year
+year_group <- group_by(records, year)
 
+#Summarized the data and put it into a variable for question 7
+av_time_year <- summarise(year_group, av_time = mean(time))
+
+#Printed variable
+av_time_year
 ```
 # Question 7
 Continuing with your results in Question 6: Do you notice a trend across years? Are the record times getting faster, slower, or no clear pattern in time? Create a barplot where each year appears on the x axis (you can treat year as a categorical variable in this case) and y axis showing the mean record time in each year. Interpret your graph. *Hint: Use your code in Question 6, which returns the average record times by year, followed by ` %>% ggplot(aes(year,mean)) + geom_bar(stat='identity')` Hint2: To make your figure wider, you can insert fig.width=10 inside the curly brackets at the beginning of your r code chunk below, as {r, fig.width=10} which I already did for you below,*
 
 ```{r, fig.width=10}
+#Actually grab ggplot
+library(ggplot2)
 
+#Make the bar graph
+ggplot(data = av_time_year, aes(year, av_time)) + geom_bar(stat = "identity", fill = c("red", "orange", "yellow","green", "blue", "purple","red", "orange", "yellow","green", "blue", "purple", "red", "orange", "yellow","green", "blue", "purple", "red", "orange", "yellow","green", "blue", "purple", "red"), color = "black")
+
+
+#There doesn't seem to be any specific pattern, maybe they get a little slower over time, but there are peaks and valleys.
 ```
 
 # Question 8
@@ -89,27 +130,57 @@ Create two overlaid histograms by `type` on the same plot where each histogram s
 Note: Set `alpha=.5` for transparency.
 
 ```{r}
+#Filter out the single lap records
+single_lap_records <- filter(records, type == "Single Lap")
 
+#Filter out the triple lap records
+triple_lap_records <- filter(records, type == "Three Lap")
+
+#Create a histogram to see the two
+ggplot() + geom_histogram(aes(x = single_lap_records$time), fill = "blue", alpha = 0.5) + 
+  geom_histogram(aes(x = triple_lap_records$time), fill = "orange", alpha = 0.5)
 ```
 
 # Question 9
 Three Lap time reports the total time spent finishing three laps in total, as opposed to finishing a single lap. Let's divide all time observations with `type=="Three Lap"` by 3 to check whether **per lap** performance declines across Three Lap vs. Single Lap. Generate a new variable named `time_per` which is the time spent per round, and create two overlaid histograms of `type_per` by `type`. Hint: Use `mutate()`, and inside `mutate()` use `ifelse()` function to conditionally replace rows: e.g.., `ifelse(type=="Three Lap",time/3,time)` which divides `time` by three only if `type=="Three Lap"`.
 
 ```{r}
+#Add time_per variable
+records <- mutate(records, time_per = if_else(type == "Three Lap", time / 3, time))
 
+#Filter out the triple lap records so that the histogram knows what to target
+triple_lap_records <- filter(records, type == "Three Lap")
+
+#Create a histogram to see the two
+ggplot() + geom_histogram(aes(x = single_lap_records$time), fill = "blue", alpha = 0.5) + 
+  geom_histogram(aes(x = triple_lap_records$time_per), fill = "orange", alpha = 0.5)
 ```
 # Question 10
 There appears to be recent discoveries of shortcuts within some of the tracks causing a number of extraordinarily fast records set in `Three Lap` tracks (Have you noticed this in your graph in Question 9?). Replicate your histogram in Question 9 with `shortcut=="No"` filter.
 
 ```{r}
+#Modify triple_lap_records to get correct variable
+triple_lap_records <- filter(triple_lap_records, shortcut == "No")
 
+#Do the histogram again
+ggplot() + geom_histogram(aes(x = single_lap_records$time), fill = "blue", alpha = 0.5) + 
+  geom_histogram(aes(x = triple_lap_records$time_per), fill = "orange", alpha = 0.5)
 ```
 
 # Question 11
 Lastly, compare the mean `time` by `system_played`. Do you observe a difference across the two game systems? (Note: NTSC version of the game runs at 60 FPS (Frames Per Second), and PAL runs at 50 FPS!) Does this appear to affect performance of records set?
 
 ```{r}
+#Group by system
+system_group <- group_by(records, system_played)
 
+#Summarize the two to showcase how mean time varies by system
+year_and_system <- summarise(system_group, av_time <- mean(time))
+
+#Print the table
+year_and_system
+
+#NTSC runs faster than PAL, and it leads to a difference of around 15 seconds between the two systems mean records.
 ```
 
 You are done! 🏁 Don't forget to commit and push your .Rmd file to your Github repository before the due date. (Well... the checkered flag emoji is now super relevant for this assignment!)
