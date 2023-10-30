@@ -15,10 +15,11 @@ Cluster_Ex_HC<-hclust(dist(Cluster_Ex,method="manhattan"),method="single")
 Cluster_Ex_HC
 plot(Cluster_Ex_HC,cex=.75,xlab="")
 
+#The hclust function helps return the dendrogram, as well as finding different numbers of clusters within the data
 
 #Find clusters in the data
 Cluster_Ex_HC<-hclust(dist(Cluster_Ex))
-cutree(Cluster_Ex_HC,k=3)
+cutree(Cluster_Ex_HC,k=3) #Used with hclust to group the tree into clusters, only expecting a list of merge, height, and labels
 
 # Find different number of clusters within the data
 Cluster_Ex<-data.frame(Cluster_Ex,cutree(Cluster_Ex_HC,k=c(3,4,5)))
@@ -26,7 +27,7 @@ names(Cluster_Ex)
 names(Cluster_Ex)<-c("X","X1","X2","k_3","k_4","k_5")
 head(Cluster_Ex)
 
-Cluster_Ex<-read.csv("D:/Dickinson College Teaching/DATA 180/data/Cluster_Ex_clusters.csv")
+Cluster_Ex<-read.csv("/Users/benjaminfox/Desktop/Data-180-Ben-Fox/Cluster_Ex_clusters.csv")
 
 #plot the clusters
 plot(X2~X1,data=Cluster_Ex,xlim=c(0,4),ylim=c(0,4),cex.axis=1.3,cex.lab=1.2,cex=1.2,pch=15+k_3,col=k_3)
