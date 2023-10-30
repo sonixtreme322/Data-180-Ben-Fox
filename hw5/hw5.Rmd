@@ -74,7 +74,7 @@ b) Farthest-neighbor
 
 c) Average-neighbor
 
-# Question 4
+# Question 4 (Skip, Image isn't included, the Professor said it's chill)
 Consider the following dendrogram created by a hierarchical clustering of 11 frequently used English words.
 
 ![Caption: 11 frequently used English words](hw5-image.png)
