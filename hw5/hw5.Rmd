@@ -8,6 +8,8 @@ date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output: 
   html_document
 ---
+19/20. Your work is very well explained.
+
 
 **Due date:** November 2 beginning of class.
 
@@ -35,9 +37,10 @@ Manhattan distance is done very similarly but it's not the same. Assuming object
 dist(X, method = "manhattan") #This answer is also correct
 ```
 
-c) Find the Minkowski distance ($\ro$ = 3) between the second and third objects. Round the answer to have two decimal points.
+c) Find the Minkowski distance ($\rho$ = 3) between the second and third objects. Round the answer to have two decimal points.
 
 Assuming that 3 = p here, cause I'm not sure what else that thing in parentheses is supposed to mean otherwise. The answer is cube root of 11 or 2.22
+#The thing in parentheses is the greek letter rho which looks like a lower-case letter "p". 
 
 ```{r}
 dist(X, method = "minkowski", p = 3) #The answer is correct
@@ -112,6 +115,7 @@ It'll be 1 (the distance between 1 and 2).
 b) Farthest-neighbor
 
 It's 1. The distance between 1 and 3.
+Furthest neighbor distance is 9-between 1 and 3. (-1)
 
 c) Average-neighbor
 
@@ -138,7 +142,7 @@ Let's practice hierarchical clustering with the `vertebrate` dataset that is sav
 a) First, read in the `vertebrate.csv` file and store it in a dataframe object named `vertebrate`. How many rows does the dataframe have? Print the entire dataset in your solutions.
 ```{r}
 #Create vertebrate object
-vertebrate <- as.data.frame(read.csv("/Users/benjaminfox/Desktop/Data-180-Ben-Fox/hw5/vertebrate.csv"))
+vertebrate <- as.data.frame(read.csv("C:/Users/rodge/Downloads/vertebrate.csv"))
 
 #Print vertebrate data frame
 vertebrate
