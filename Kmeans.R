@@ -1,16 +1,16 @@
-Cluster_Ex<-read.csv("") # The path to your data goes here. 
+Cluster_Ex<-read.csv("/Users/benjaminfox/Desktop/Data-180-Ben-Fox/Cluster_Ex(11_6).csv") # The path to your data goes here. 
 head(Cluster_Ex)
 
-
+#Assigns the K-Means Clustering to a variable, giving it three clusters.
 Kmeans_3<-kmeans(Cluster_Ex,centers=3)
 
+Kmeans_3
 
 #Centers.
 Kmeans_3$centers
 
 #Within Group Sum of Squares.
 Kmeans_3$withinss
-
 
 #Clusters. 
 Kmeans_3$cluster
