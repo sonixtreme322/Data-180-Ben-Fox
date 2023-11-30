@@ -3,14 +3,13 @@
 # Text Mining
 # nomination speech
 
-setwd(" ") # Set this to your local GitHub repository.
+setwd("/Users/benjaminfox/Desktop/Data-180-Ben-Fox") # Set this to your local GitHub repository.
 
 library(tm) # text mining package
 
 # Instead of that, just read in the speech
 charVector <- scan("speech.txt", character(0), sep = "\n") # "\n is a line separator
 head(charVector)
-
 
 charVector_block <- scan("speech.txt", character(0))
 charVector_block # default separator for the scan function is space.
@@ -22,7 +21,7 @@ head(posWords,15)
 head(negWords,15)
 
 # How does the computer know that these are positive and negative words? 
-
+#We told it via scanning those .txt documents in, which someone else wrote manually.
 
 # cleaning part!!
 wordVector <- VectorSource(charVector) # from tm package, convert to vector
