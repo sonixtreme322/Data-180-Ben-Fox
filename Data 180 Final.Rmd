@@ -1,0 +1,239 @@
+---
+title: "Ben Fox's Data 180 Final"
+author: 
+  name: "Benjamin J. Fox"
+  email: foxbe@dickinson.edu
+date: "2023-12-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Part One: Data Wrangling
+#a. What is the dimension (shape) of the dataset? How many rows and columns does the data set have?
+```{r}
+#Import loan_default_data_set.csv
+bank_dataset <- read.csv("/Users/benjaminfox/Desktop/Data-180-Ben-Fox/loan_default_data_set.csv")
+
+#Read in the dimensions of the imported data
+dim(bank_dataset)
+
+#That just told me that the data set has 20000 rows a.k.a. objects, and there are 21 columns a.k.a. variables.
+```
+
+#b. Report the column names of the dataset.
+```{r}
+#Use ls to return the column names of the dataset
+ls(bank_dataset)
+
+#I'm just gonna let you read the output of ls, because all of the column names are right there.
+```
+
+#c. Which types of data are there in the dataset? Numeric, categorical, ordinal?
+```{r}
+#Use str on the data set to very quickly look at the data and the types of data in each variable.
+str(bank_dataset)
+
+#Almost all of the data in the data set is numeric, the only exception being rep_education. That variable is a categorical variable. I am tempted to call it an ordinal variable since when analyzing I might be prompted to order that variable based on the types of education given, however since no immediate means of ordering that data exists, it will be presumed to be categorical.
+```
+
+#d. Which columns contain missing values and how much (what percent) of those columns are missing?
+```{r}
+#Create a blank list as long as the list that's going to need to be created
+TF <- numeric(length(colnames(bank_dataset)))
+
+#Create a for loop to sort through every column of the data set
+for (i in 1:ncol(bank_dataset)){
+    #How many missing values are in this column
+    missing_values <- sum(is.na(bank_dataset[,i]))
+    
+    #What percent of the column is that
+    missing_values_percent <- (missing_values / 20000) * 100
+    
+    #Put that percentage into the list
+    TF[i] <- missing_values_percent
+}
+
+#Print that list
+TF
+```
+
+#e. How do you think we should deal with missing values?
+There are a multitude of ways to deal with missing values. One way is to simply set every missing value to zero, and use that as they come up. Problems there include skewing the data in a completely wrong direction, so we could try to counter balance this by setting all missing values to the mean. This could cause problems if the data is very scattered with little sense of direction, forcing a mode and story where none exist. We could try to generally scatter all missing values along the range correlating to their likelihood to be anywhere, which might sound good but would likely mess with any sort of unsupervised learning if it has no way to know what value it'd most likely be in a given object. We could also simply remove values from the data set, which I would find to be the most practical in getting the most complete data possible, but still, missing values show up all the time, and if too many values are taken from the data set it becomes completely unusable. We could try to remove all missing values depending on when we do or don't need them, but we never really know when that exactly is so it's a very flawed approach. I'm not sure what to do.
+
+#f. With this data, would you fit a supervised or an unsupervised learning model? Why?
+I would go with an unsupervised learning model to attempt to sort all of the objects into clusters to try to figure out a possible way to treat the data coming in and begin to understand what's likely to happen when or if new data is added to the set. 
+
+#g. For part 2 and 3 drop all rows of the data that contain missing values. Print the dimensions of the resulting dataset that has no missing values.
+```{r}
+#Creates an empty data frame
+complete_bank_dataset <- data.frame()
+
+#Create a for loop to sort through every object
+for (i in 1:nrow(bank_dataset)){
+  #Set truth variable so that we can account for objects with missing values
+  truth <- 1
+  #Sort through every column of that object
+  for (j in 1:ncol(bank_dataset)){
+    #Check to see if any of those columns contain a missing value
+    if (isTRUE(is.na(bank_dataset[i,j]))){
+      #If it does, set that previous truth value to zero
+      truth <- 0
+    }
+  }
+  #Check to see if that previous truth value accessed still exists
+  if (truth == 1){
+    #If it does, then the entire object exists, and I'll put that object into the new dataset
+    complete_bank_dataset <- rbind(complete_bank_dataset, bank_dataset[i,])
+  }
+}
+
+#Rename each row to be their new proper number
+row.names(complete_bank_dataset) <- 1:nrow(complete_bank_dataset)
+
+#Read the head of the new data set to make sure everything worked properly
+head(complete_bank_dataset)
+
+#Get the dimensions of the dataset, which I can see in the environment is 16653 x 21
+dim(complete_bank_dataset)
+```
+
+
+#Part Two: Data Summary Statistics:
+#a. Find the summary statistics of the data set. You can use the summary function from dplyr.
+```{r}
+#Import dplyr library
+library("dplyr")
+
+#Summarize the dataset
+summary(complete_bank_dataset)
+```
+
+#b. Based on the mean, mode, and median, is "num_card_inq_24_month" bell shaped, left, right skewed? How about "tot_amount_currently_past_due"? "credit_age"?
+```{r}
+#Create stat_mode function so that you can find the mode of any variable asked for without too much difficulty
+stat_mode <- function(x){
+  #Creates a variable that gets all values in the variable, just eliminating duplicates
+  unique_synonym <- unique(x)
+  
+  #Take that variable, match up all of the cases in which a unique value, tally up the amount of times they occur, and figure out which one of those is the largest and returns that value.
+  unique_synonym[which.max(tabulate(match(x, unique_synonym)))]
+}
+
+#Get the mean, median, and create a function to find the mode of "num_card_inq_24_month"
+mean(complete_bank_dataset$num_card_inq_24_month) #1.043896
+median(complete_bank_dataset$num_card_inq_24_month) #0
+stat_mode(complete_bank_dataset$num_card_inq_24_month) #0
+#This data is likely somewhat skewed right, as a vast majority of the data is at the lower value, but some higher values are giving the data a slight tail right.
+
+#Get the mean, median, and mode of "tot_amount_currently_past_due"
+mean(complete_bank_dataset$tot_amount_currently_past_due) #354.1857
+median(complete_bank_dataset$tot_amount_currently_past_due) #0
+stat_mode(complete_bank_dataset$tot_amount_currently_past_due) #0
+#The data is heavily skewed right, with the mean being much higher than the mean or mode due to some very high values pulling the mean very far from the 0 that is much more common
+
+#Get the mean, median, and mode of "credit_age"
+mean(complete_bank_dataset$credit_age) #280.8684
+median(complete_bank_dataset$credit_age) #281
+stat_mode(complete_bank_dataset$credit_age) #295
+#The data is likely somewhat skewed left, but is mostly a bell curve, the mean is pulled by the lower values, and the median is too, albeit to a lower degree, but more commonly seen are values that are greater than both the mean and median.
+```
+
+#c. Plot a histogram of the variables in b above. Do the shapes of the histograms confirm the skewness you found in b?
+```{r}
+#Create a basic histogram for "num_card_inq_24_month"
+hist(complete_bank_dataset$num_card_inq_24_month)
+#The data is far more skewed right than I thought, simply because I didn't realize the mean being pulled slightly in a direction could still imply far more existing.
+
+#Create a basic histogram for "tot_amount_currently_past_due"
+hist(complete_bank_dataset$tot_amount_currently_past_due)
+#This is near exactly as I expected, albeit more mode-centric than I thought, as the mode bin here has over 15000 objects, while the previous histogram contained  a bit over 10000
+
+#Create a basic histogram for "credit_age"
+hist(complete_bank_dataset$credit_age)
+#Again, this is around what I expected, maybe a bit more of a bell curve than I thought, though it is nice to see a proper bell curve in the face of those two curves being so skewed right.
+```
+
+#d. How would you convert the "rep_education" column into numerical data? Name two ways.
+The immediate way I think to convert rep_education into numerical data is to directly turn each category into a number from 0-3, 0 for other, then progressively climbing up stages of education until 3 is graduate. Or, and this is a weirder way, but you could find every time one of the categories in "rep_education" occurs, tally those up, and then reassign those categories in the "rep_education" column to the numbers that correspond to their frequency.
+
+#Part Three: Data Visualization. For every graph in this section, remember to label your axes and to include a title. feel free to play around with graphics and parameters. Have fun and explore!
+#a. Plot a bar graph for the "Def_Ind" column and describe it.
+```{r}
+#Creating an independent variable to store "Def_Ind" column data
+defaulted <- complete_bank_dataset$Def_ind
+
+#Creating another variable to calculate the frequency of defaults
+default_frequency <- table(defaulted)
+
+#Renaming the columns in the newly created table
+names(default_frequency) <- c("Didn't Default", "Defaulted")
+
+#Creating a bar plot with that data
+barplot(default_frequency, 
+        main = "Frequency of Account Default", 
+        xlab = "Did Default Occur?",
+        ylab = "Frequency",
+        col = c("blue","red"))
+
+#It's a fairly easy to read frequency chart with two columns that shows that a vast majority of card members are on top of their payments, but there are around 2 to 3 thousand members who have defaulted. 
+```
+
+#b. Plot a bar graph for the "rep_education" column and describe it.
+```{r}
+#Create an independent variable for "rep_education"
+education_level <- complete_bank_dataset$rep_education
+
+#Turn that variable into a table for the barplot to read, also factor it for better readability
+frequency_of_education <- table(factor(education_level, 
+                                       levels = c("high_school", "college", "graduate", "other")))
+
+#Relabel each column so they look like more proper english
+names(frequency_of_education) <- c("High School", "College", "Graduate School", "Other")
+
+#Create a bar plot with the given table
+barplot(frequency_of_education,
+        main = "What Education Do Card Members Have",
+        xlab = "Kinds of Education",
+        ylab = "Frequency",
+        col = c("red", "blue", "darkgreen", "yellow"))
+
+#It's a four column frequency bar plot plotting which education card members have. More card members have gone to college than all other categories combined, but graduating from high school or graduate school is still decently common. It is very rare to have not done either of those, with what seems to be around maybe 100-200 members in the "other" category.
+```
+
+#c. Plot a histogram of the "rep_income" variable.
+```{r}
+#Getting an independent version of the "rep_income variable
+annual_income <- complete_bank_dataset$rep_income
+
+#Using 20 bins instead of the rounded up square root of the object simply because the data is more readable this way
+
+#Create the histogram
+hist(annual_income, 
+     breaks = 20,
+     main = "Distribution of Annual Income Among Card Members",
+     xlab = "Bins of Annual Income",
+     ylab = "Frequency",
+     col = "purple")
+
+#The histogram is purple with 20 bins in it and shows the distribution of annual income among all card members, It is bell shaped with a slight skew left and estimates average annual income of card members to be around $16,000 per year. 
+```
+
+#d. Plot a box plot of the "tot_balance" variable. using the box plot, report the five number summary of the variable. Are there any outliers for this variable?
+```{r}
+#Isolate the variable to its own variable
+total_balance <- complete_bank_dataset$tot_balance
+
+#Plug that into a box plot
+boxplot(total_balance,
+        horizontal = TRUE,
+        main = "Balance of Member's Credit Products",
+        xlab = "Total Balance",
+        col = "gold")
+
+#An easier way to get a five number summary is summary(total_balance), but it excludes the important deciles so I'll estimate from the box plot. The first decile is around 48000, the first quartile is around 90000, the median is around 110000, the third quartile is around 120000 maybe 125000, and the ninth decile is around 175000. There are a fair amount of outliers, but it might only seem like a higher than average amount of outliers because I'm working with a dataset of a bit under 17000 objects.
+```
+
+You're done, good job.
