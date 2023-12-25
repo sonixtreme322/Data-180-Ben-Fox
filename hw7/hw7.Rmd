@@ -10,7 +10,7 @@ output:
 editor_options: 
   chunk_output_type: console
 ---
-
+14/20. Good job. 
 **Due date:** December 4 beginning of class.
 
 
@@ -34,6 +34,7 @@ Read the `news.csv` into R and create the object `news` using
 #library(tidyverse)
 library(NLP)
 library(tm)
+library(dplyr)
 news<-read.csv("news.csv",header=T)
 ```
 
@@ -208,6 +209,8 @@ Let's now practice working with `quanteda` and `corpus` packages. Install the pa
 install.packages("corpus") #I literally can't continue, I've run out of time, and I need to update R itself to get this specific package at all. I'm sorry, I was hoping to do well but everything is happening all the time for the past week and I haven't had time to put the time into this homework that I didn't realize it'd need. I'm so so sorry.
 library("quanteda")
 library('corpus')
+
+### Its okay. You have done well on the portions of the HW you attempted. Good job. 
 ```
 
 # Question 10
