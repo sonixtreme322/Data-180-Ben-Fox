@@ -6,7 +6,7 @@ author:
 date: "2023-12-09"
 output: html_document
 ---
-
+38/30. Good job. 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 #a. What is the dimension (shape) of the dataset? How many rows and columns does the data set have?
 ```{r}
 #Import loan_default_data_set.csv
-bank_dataset <- read.csv("/Users/benjaminfox/Desktop/Data-180-Ben-Fox/loan_default_data_set.csv")
+bank_dataset <- read.csv("C:/Users/rodge/OneDrive/Desktop/DATA 180 -Intoduction to Data Science/DATA-180-Introduction-to-Data-Science--Section-2/data/loan_default_data_set.csv")
 
 #Read in the dimensions of the imported data
 dim(bank_dataset)
@@ -63,8 +63,12 @@ TF
 #e. How do you think we should deal with missing values?
 There are a multitude of ways to deal with missing values. One way is to simply set every missing value to zero, and use that as they come up. Problems there include skewing the data in a completely wrong direction, so we could try to counter balance this by setting all missing values to the mean. This could cause problems if the data is very scattered with little sense of direction, forcing a mode and story where none exist. We could try to generally scatter all missing values along the range correlating to their likelihood to be anywhere, which might sound good but would likely mess with any sort of unsupervised learning if it has no way to know what value it'd most likely be in a given object. We could also simply remove values from the data set, which I would find to be the most practical in getting the most complete data possible, but still, missing values show up all the time, and if too many values are taken from the data set it becomes completely unusable. We could try to remove all missing values depending on when we do or don't need them, but we never really know when that exactly is so it's a very flawed approach. I'm not sure what to do.
 
+# There is no right way to deal with missing values. In practice we try multiple approaches and use the one that makes your models more accurate. 
+
 #f. With this data, would you fit a supervised or an unsupervised learning model? Why?
 I would go with an unsupervised learning model to attempt to sort all of the objects into clusters to try to figure out a possible way to treat the data coming in and begin to understand what's likely to happen when or if new data is added to the set. 
+
+# Supervised learning model because you have a dependent and independent variables (-2)
 
 #g. For part 2 and 3 drop all rows of the data that contain missing values. Print the dimensions of the resulting dataset that has no missing values.
 ```{r}
